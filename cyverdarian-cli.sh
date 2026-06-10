@@ -1,16 +1,16 @@
 # =======================================
-# MARWIN'S CUSTOM CTF COMMANDS AND ALIASES
+# CYVERDARIAN'S CUSTOM CTF COMMANDS AND ALIASES
 # ==========================================
 # 1. MAIN HELP MENU (clhelp)
-alias clhelp='echo -e "\n\e[1;32m[+] MARWIN-LAPTOP CTF MAIN MENU\e[0m" && \
+alias clhelp='echo -e "\n\e[1;32m[+] CYVERDARIAN MAIN MENU\e[0m" && \
 echo "--------------------------------------------------" && \
 echo "I-type ang mga sumusunod na commands para sa kategorya:" && \
 echo -e "  \e[1;35mcchelp\e[0m  - Para sa mga command ng Cryptography" && \
 echo -e "  \e[1;36mcfhelp\e[0m  - Para sa mga command ng Digital Forensics" && \
 echo "--------------------------------------------------" && \
 echo -e "\e[1;33m[!] TANDAAN MO ITONG TERMINAL COMMANDS:\e[0m" && \
-echo "  Pang-edit ng code (Open Editor) : nano ~/.bashrc" && \
-echo "  Pang-refresh ng code (Apply)    : source ~/.bashrc" && \
+echo "  Pang-edit ng code (Open Editor) : nano cyverdarian-cli.sh" && \
+echo "  Pang-refresh ng code (Apply)    : source cyverdarian-cli.sh" && \
 echo "--------------------------------------------------"'
 
 # 2. CRYPTOGRAPHY SUB-MENU (cchelp)
