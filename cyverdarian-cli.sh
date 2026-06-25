@@ -41,6 +41,8 @@ echo -e "\e[1;33m[!] QUICK TERMINAL REMINDERS:\e[0m" && \
 echo "  To edit this CLI script     : nano ~/cyverdarian-cli/cyverdarian-cli.sh" && \
 echo "  To apply changes (Refresh)  : source ~/cyverdarian-cli/cyverdarian-cli.sh" && \
 echo -e "  \e[1;31mTo exit back to Windows\e[0m     : Type \e[1;32mwin\e[0m or \e[1;32mclexit\e[0m" && \
+echo "--------------------------------------------------------------------------------" && \
+echo -e "  \e[1;34mthelp\e[0m  - CYVERDARIAN TOOLS HELP OPEN SOURCE" && \
 echo "--------------------------------------------------------------------------------"'
 
 alias win='exit'
@@ -166,4 +168,9 @@ echo "WHEN TO USE: When you have a target IP/Port and need to audit open network
 echo "--------------------------------------------------------------------------------" && \
 echo "  SMB List Shares : smbclient -L //IP_ADDRESS -p PORT -N" && \
 echo "  SMB Connect     : smbclient //IP_ADDRESS/SHARE_NAME -p PORT -N" && \
+echo "--------------------------------------------------------------------------------"'
+
+# 7. OPE SOURCE TOOL
+alias thelp='echo -e "\n\e[1;32m[+] CYVERDARIAN TOOLS HELP\e[0m" && \
+echo "  VirusTotal  : https://www.virustotal.com (i-search ang hash dito)" && \
 echo "--------------------------------------------------------------------------------"'
