@@ -34,6 +34,7 @@ echo "Type any of the following commands to view specific category cheat sheets:
 echo -e "  \e[1;35mcchelp\e[0m  - Cryptography Tools (Ciphers, encoding, decoding, and hashing)" && \
 echo -e "  \e[1;32mxhelp\e[0m   - Diffie-Hellman & XOR Tools (Custom Decryption Functions)" && \
 echo -e "  \e[1;36mcfhelp\e[0m  - Digital Forensics (File analysis, hidden data, and metadata)" && \
+echo -e "  \e[1;34mshelp\e[0m   - Steganography Tools (Hidden data in images, audio, and extraction)" && \
 echo -e "  \e[1;33mmhelp\e[0m   - Metadata Extraction & Decryption Guide (Advanced Parsing)" && \
 echo -e "  \e[1;34mcnhelp\e[0m  - Network & Reconnaissance (Port scanning, SMB audits, and remote access)" && \
 echo "--------------------------------------------------------------------------------" && \
@@ -42,11 +43,32 @@ echo "  To edit this CLI script     : nano ~/cyverdarian-cli/cyverdarian-cli.sh"
 echo "  To apply changes (Refresh)  : source ~/cyverdarian-cli/cyverdarian-cli.sh" && \
 echo -e "  \e[1;31mTo exit back to Windows\e[0m     : Type \e[1;32mwin\e[0m or \e[1;32mclexit\e[0m" && \
 echo "--------------------------------------------------------------------------------" && \
-echo -e "  \e[1;34mthelp\e[0m  - CYVERDARIAN TOOLS HELP OPEN SOURCE" && \
+echo -e "  \e[1;34thelp\e[0m  - CYVERDARIAN TOOLS HELP OPEN SOURCE" && \
 echo "--------------------------------------------------------------------------------"'
 
 alias win='exit'
 alias clexit='exit'
+
+# STEGANOGRAPHY SUB-MENU (shelp)
+alias shelp='echo -e "\n\e[1;34m[🖼️] STEGANOGRAPHY COMMAND LIST & CHEATSHEET\e[0m" && \
+echo "DESCRIPTION: Use this when you suspect data is hidden inside images or audio files." && \
+echo "WHEN TO USE: During CTFs or Forensics cases where files contain invisible embedded secrets." && \
+echo "--------------------------------------------------------------------------------" && \
+echo "  Steghide Extract : steghide extract -sf <file.jpg/wav>" && \
+echo "                     [USE WHEN: May alam kang passphrase/password para makuha ang nakatagong file.]" && \
+echo "  Steghide Info    : steghide info <file.jpg>" && \
+echo "                     [USE WHEN: Gusto mo lang malaman kung may nakatago bang file bago mo i-extract.]" && \
+echo "  Stegseek (Crack) : stegseek <file.jpg> \$ROCKYOU" && \
+echo "                     [USE WHEN: Hindi mo alam ang password ng steghide at gusto mo itong i-brute force gamit ang RockYou wordlist. (Napakabilis nito!)]" && \
+echo "  Zsteg (PNG/BMP)  : zsteg -a <file.png>" && \
+echo "                     [USE WHEN: LSB (Least Significant Bit) steganography sa PNG files para makita ang nakatagong text/flags.]" && \
+echo "  Strings Scan     : strings <file.jpg> | tail -n 20" && \
+echo "                     [USE WHEN: Basic check kung may biglang text na idinugtong lang sa pinaka-dulo ng file.]" && \
+echo "--------------------------------------------------------------------------------" && \
+echo -e "\e[1;33m[🌐] RECOMMENDED ONLINE STEGO WEBSITES:\e[0m" && \
+echo "  AperiSolve       : https://www.aperisolve.com/ (Zsteg, Steghide, at Outguess scan sa isang click)" && \
+echo "  Steganography On : https://steganography.online/ (Madaling visual decoder para sa web)" && \
+echo "--------------------------------------------------------------------------------"'
 
 alias cchelp='echo -e "\n\e[1;35m[✦] CRYPTOGRAPHY & FORENSICS CHEATSHEET\e[0m" && \
 echo "DESCRIPTION: Use this when dealing with encoded strings, hashes, text ciphers, or broken files." && \
@@ -66,6 +88,14 @@ echo "                  [USE WHEN: Gumagawa ng payload para sa Buffer Overflow a
 echo "  RSA Decrypt   : openssl pkeyutl -decrypt -inkey PRIVATE_KEY -in ENCRYPTED_FILE -out OUTPUT_FILE" && \
 echo "                  [USE WHEN: May nakuha kang hinarang na traffic o file na encrypted ng Asymmetric Cryptography at hawak mo ang Private Key.]" && \
 echo "--------------------------------------------------------------------------------" && \
+echo -e "\e[1;32m[🔢] UNIVERSAL BINARY CONVERSION TOOLS (BASE-2):\e[0m" && \
+echo "                  [USE WHEN: Nakakuha ng file na puro 0 at 1 lang ang laman at kailangang i-convert.]" && \
+echo "  Binary to File: cat file.bin | tr -d '\''[:space:]'\'' | perl -lpe '\''\$_=pack\"B*\",\$_'\'' > output_file" && \
+echo "                  (BEST PRACTICE: Nililinis muna ang lahat ng spaces/newlines bago i-pack ng Perl" && \
+echo "                  pabalik sa orihinal nitong anyo gaya ng JPG, PNG, o TXT.)" && \
+echo "  Raw Perl Only : perl -lpe '\''\$_=pack\"B*\",\$_'\''" && \
+echo "                  (Gagamitin lang kung SIGURADONG magkakadikit na at walang space ang mga binary string.)" && \
+echo "--------------------------------------------------------------------------------" && \
 echo -e "\e[1;36m[🔎] BROKEN FILE IDENTIFICATION & CORRUPT MAGIC BYTES REPAIR:\e[0m" && \
 echo "                  [USE WHEN: Ayaw bumukas ng na-extract o na-decode na file (e.g., Corrupted Image error).]" && \
 echo "  Check File ID : file <filename>" && \
@@ -79,10 +109,10 @@ echo "                  (Buksan ang text file at manu-manong palitan ang nakitan
 echo "  3. Revert/Fix : xxd -r dump.txt > fixed_file.jpg" && \
 echo "                  (Ibe-braid o ibabalik ang binagong text dump pabalik sa isang gumaganang binary/larawan.)" && \
 echo "                  * Common Magic Bytes Reference:" && \
-echo "                    - JPEG/JPG : ffd8 ffe0 (May 'JFIF' sa kanang bahagi ng xxd)" && \
-echo "                    - PNG      : 8950 4e47 (May '.PNG' sa kanang bahagi ng xxd)" && \
-echo "                    - PDF      : 2550 4446 (May '%PDF' sa kanang bahagi ng xxd)" && \
-echo "                    - ZIP      : 504b 0304 (May 'PK' sa kanang bahagi ng xxd)" && \
+echo "                    - JPEG/JPG : ffd8 ffe0 (May '\''Simple JFIF'\'' sa kanang bahagi ng xxd)" && \
+echo "                    - PNG      : 8950 4e47 (May '\''.PNG'\'' sa kanang bahagi ng xxd)" && \
+echo "                    - PDF      : 2550 4446 (May '\''%PDF'\'' sa kanang bahagi ng xxd)" && \
+echo "                    - ZIP      : 504b 0304 (May '\''PK'\'' sa kanang bahagi ng xxd)" && \
 echo "--------------------------------------------------------------------------------" && \
 echo -e "\e[1;33m[!] FOR ADVANCED XOR & DIFFIE-HELLMAN DECRYPTION:\e[0m" && \
 echo -e "  Type \e[1;32mxhelp\e[0m to view usage for custom functions (dhxor & hexdec)." && \
