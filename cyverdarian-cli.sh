@@ -1,6 +1,6 @@
 # CYVERDARIAN'S CUSTOM CTF FUNCTIONS (CORE LOGIC)
 # ==============================================================================
-# TRY KO LANG KUNG MAG SASAVE
+
 # 2. Smart Hex XOR Decrypter (Pure Linux commands)
 hexdec() {
     local hex_string=$1
@@ -48,25 +48,54 @@ echo "--------------------------------------------------------------------------
 alias win='exit'
 alias clexit='exit'
 
-# 2. CRYPTOGRAPHY SUB-MENU (cchelp)
-alias cchelp='echo -e "\n\e[1;35m[✦] CRYPTOGRAPHY COMMAND LIST\e[0m" && \
-echo "DESCRIPTION: Use this when dealing with encoded strings, hashes, or text ciphers." && \
-echo "WHEN TO USE: When you find suspicious strings (like Base64), MD5 hashes, or need text generation." && \
+alias cchelp='echo -e "\n\e[1;35m[✦] CRYPTOGRAPHY & FORENSICS CHEATSHEET\e[0m" && \
+echo "DESCRIPTION: Use this when dealing with encoded strings, hashes, text ciphers, or broken files." && \
+echo "WHEN TO USE: When you find suspicious strings, hashes, or files that refuse to open after decoding." && \
 echo "--------------------------------------------------------------------------------" && \
 echo "  Base64 Decode : echo -n '\''string'\'' | base64 -d" && \
+echo "                  [USE WHEN: Nakakita ng maikling text na may letters, numbers, at nagtatapos sa '='.]" && \
+echo "  Base64 File   : base64 -d suspicious.log > recovered_image.png" && \
+echo "                  [USE WHEN: Ang BUONG log file o payload ay naglalaman ng dambuhalang block ng Base64" && \
+echo "                  at gusto mong i-convert ito pabalik sa orihinal na anyo (gaya ng nakatagong larawan o file).]" && \
 echo "  Hex to ASCII  : echo '\''hex_string'\'' | xxd -r -p" && \
+echo "                  [USE WHEN: Ang log o payload ay puro numbers at letters A-F lang (e.g., 414243 = ABC).]" && \
 echo "  ROT13 Decode  : echo '\''text'\'' | tr '\''A-Za-z'\'' '\''N-ZA-Mn-za-m'\''" && \
+echo "                  [USE WHEN: Obvious na text pero mukhang pinagbabaligtad o scrambled ang letters (madalas sa CTF ciphers).]" && \
 echo "  ASCII Repeat  : python3 -c '\''print(\"char\" * count)'\''" && \
+echo "                  [USE WHEN: Gumagawa ng payload para sa Buffer Overflow attacks kung saan kailangan mo ng paulit-ulit na letra (e.g., 1000 'A's).]" && \
 echo "  RSA Decrypt   : openssl pkeyutl -decrypt -inkey PRIVATE_KEY -in ENCRYPTED_FILE -out OUTPUT_FILE" && \
+echo "                  [USE WHEN: May nakuha kang hinarang na traffic o file na encrypted ng Asymmetric Cryptography at hawak mo ang Private Key.]" && \
+echo "--------------------------------------------------------------------------------" && \
+echo -e "\e[1;36m[🔎] BROKEN FILE IDENTIFICATION & CORRUPT MAGIC BYTES REPAIR:\e[0m" && \
+echo "                  [USE WHEN: Ayaw bumukas ng na-extract o na-decode na file (e.g., Corrupted Image error).]" && \
+echo "  Check File ID : file <filename>" && \
+echo "                  (Sinusuri ang totoong file type base sa loob nito, hindi sa .extension lang.)" && \
+echo "  Inspect Header: xxd <filename> | head -n 1" && \
+echo "                  (Tinitingnan ang unang linya ng hex para sa Magic Bytes gaya ng JFIF o PNG.)" && \
+echo "  1. Export Hex : xxd file > dump.txt" && \
+echo "                  (Ginagawang readable text file ang hex bytes ng isang file para madaing ma-edit.)" && \
+echo "  2. Edit Header: nano dump.txt" && \
+echo "                  (Buksan ang text file at manu-manong palitan ang nakitang sirang bytes sa unahan.)" && \
+echo "  3. Revert/Fix : xxd -r dump.txt > fixed_file.jpg" && \
+echo "                  (Ibe-braid o ibabalik ang binagong text dump pabalik sa isang gumaganang binary/larawan.)" && \
+echo "                  * Common Magic Bytes Reference:" && \
+echo "                    - JPEG/JPG : ffd8 ffe0 (May 'JFIF' sa kanang bahagi ng xxd)" && \
+echo "                    - PNG      : 8950 4e47 (May '.PNG' sa kanang bahagi ng xxd)" && \
+echo "                    - PDF      : 2550 4446 (May '%PDF' sa kanang bahagi ng xxd)" && \
+echo "                    - ZIP      : 504b 0304 (May 'PK' sa kanang bahagi ng xxd)" && \
 echo "--------------------------------------------------------------------------------" && \
 echo -e "\e[1;33m[!] FOR ADVANCED XOR & DIFFIE-HELLMAN DECRYPTION:\e[0m" && \
 echo -e "  Type \e[1;32mxhelp\e[0m to view usage for custom functions (dhxor & hexdec)." && \
 echo "--------------------------------------------------------------------------------" && \
 echo -e "\e[1;32m  [KALI BUILT-IN] HASH CRACKING WITH \$ROCKYOU:\e[0m" && \
+echo "                  [USE WHEN: May nakuha kang user database o password hash sa system at gusto mong malaman ang totoong password.]" && \
 echo "    1. Save hash to temporary file : echo '\''<hash_here>'\'' > /tmp/target.txt" && \
 echo "    2. Crack MD5 with John       : john --format=Raw-MD5 --wordlist=\$ROCKYOU /tmp/target.txt" && \
+echo "                                   (Length: 32 chars | e.g., 098f6bcd4621d373cade4e832627b4f6)" && \
 echo "    3. Crack SHA-1 with John     : john --format=Raw-SHA1 --wordlist=\$ROCKYOU /tmp/target.txt" && \
+echo "                                   (Length: 40 chars | e.g., a9993e364706816aba3e25717850c26c9cd0d89d)" && \
 echo "    4. Crack SHA-256 with John   : john --format=Raw-SHA256 --wordlist=\$ROCKYOU /tmp/target.txt" && \
+echo "                                   (Length: 64 chars | e.g., 5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8)" && \
 echo "    5. Show cracked password     : john --show --format=<format_type> /tmp/target.txt" && \
 echo "--------------------------------------------------------------------------------"'
 
@@ -173,4 +202,5 @@ echo "--------------------------------------------------------------------------
 # 7. OPE SOURCE TOOL
 alias thelp='echo -e "\n\e[1;32m[+] CYVERDARIAN TOOLS HELP\e[0m" && \
 echo "  VirusTotal  : https://www.virustotal.com (i-search ang hash dito)" && \
+echo "  CyberChef : https://gchq.github.io/CyberChef/" && \ 
 echo "--------------------------------------------------------------------------------"'
