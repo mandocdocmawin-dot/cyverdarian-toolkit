@@ -1,6 +1,6 @@
 # CYVERDARIAN'S CUSTOM CTF FUNCTIONS (CORE LOGIC)
 # ==============================================================================
-
+# TRY KO LANG KUNG MAG SASAVE
 # 2. Smart Hex XOR Decrypter (Pure Linux commands)
 hexdec() {
     local hex_string=$1
