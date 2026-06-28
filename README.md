@@ -8,8 +8,12 @@ Cyverdarian CLI provides quick access to categorized CTF references and workflow
 
 Current categories include:
 
-- Cryptography
-- Digital Forensics
+- Cryptography (Ciphers, encoding, decoding, and hashing)
+- Diffie-Hellman & XOR (Custom Decryption Functions)
+- Digital Forensics (File analysis, hidden data, and metadata)
+- Steganography (Hidden data in images, audio, and extraction)
+- Metadata Extraction & Decryption (Advanced Parsing)
+- Network & Reconnaissance (Port scanning, SMB audits, and remote access)
 
 ## Installation
 
