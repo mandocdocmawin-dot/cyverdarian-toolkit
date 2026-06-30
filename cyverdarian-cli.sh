@@ -1,6 +1,25 @@
 # CYVERDARIAN'S CUSTOM CTF FUNCTIONS (CORE LOGIC)
 # ==============================================================================
 
+a1z26() {
+    if [ -z "$1" ]; then
+        echo "Paano gamitin: a1z26 \"NUMBERS\""
+        echo "Halimbawa: a1z26 \"11-1-12-9\" o a1z26 \"11 1 12 9\""
+        return 1
+    fi
+    
+    # Gagamit ng maikling Python one-liner para sa kalkulasyon
+    python3 -c "
+import sys
+tokens = sys.argv[1].replace('-', ' ').split()
+try:
+    print('Decoded: ' + ''.join(chr(64 + int(t)) if 1 <= int(t) <= 26 else f'[{t}?]' for t in tokens))
+except ValueError:
+    print('Error: Siguraduhing mga numero lamang ang nilalaman ng cipher.')
+" "$1"
+}
+
+
 # 2. Smart Hex XOR Decrypter (Pure Linux commands)
 hexdec() {
     local hex_string=$1
@@ -83,6 +102,8 @@ echo "  Hex to ASCII  : echo '\''hex_string'\'' | xxd -r -p" && \
 echo "                  [USE WHEN: Ang log o payload ay puro numbers at letters A-F lang (e.g., 414243 = ABC).]" && \
 echo "  ROT13 Decode  : echo '\''text'\'' | tr '\''A-Za-z'\'' '\''N-ZA-Mn-za-m'\''" && \
 echo "                  [USE WHEN: Obvious na text pero mukhang pinagbabaligtad o scrambled ang letters (madalas sa CTF ciphers).]" && \
+echo "  A1Z26 Decode  : a1z26 \"11-1-12-9\" o a1z26 \"11 1 12 9\"" && \
+echo "                  [USE WHEN: Ang cipher ay binubuo ng mga numero mula 1 hanggang 26 na may space o hyphen.]" && \
 echo "  ASCII Repeat  : python3 -c '\''print(\"char\" * count)'\''" && \
 echo "                  [USE WHEN: Gumagawa ng payload para sa Buffer Overflow attacks kung saan kailangan mo ng paulit-ulit na letra (e.g., 1000 'A's).]" && \
 echo "  RSA Decrypt   : openssl pkeyutl -decrypt -inkey PRIVATE_KEY -in ENCRYPTED_FILE -out OUTPUT_FILE" && \
