@@ -37,6 +37,7 @@ Open a new terminal session after installation.
 
 - Linux
 - Bash
+- Windows PowerShell
 
 ## License
 
