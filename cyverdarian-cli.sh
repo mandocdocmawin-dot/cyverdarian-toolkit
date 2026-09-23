@@ -176,6 +176,88 @@ else:
 " "$1"
 }
 
+# 5. Timestamp-based AES Key Cracker (tsdec)
+#    Ginagamit kapag ang AES key ay derived mula sa SHA256(timestamp) - common
+#    sa mga "Timestamped Secrets" style na challenge. Gumagamit ng multiprocessing
+#    para mabilis kahit malaking search window.
+tsdec() {
+    if [ -z "$1" ]; then
+        echo "Paano gamitin: tsdec <ciphertext_hex> [center_timestamp] [window_seconds] [flag_prefix]"
+        echo "  - center_timestamp : default = ngayong oras (int(time.time()))"
+        echo "  - window_seconds   : default = 100000 (mas malawak, para hindi kailangan sobrang eksakto)"
+        echo "  - flag_prefix      : default = auto-detect (flag{, CTF{, picoCTF{, academy{)"
+        echo ""
+        echo "Halimbawa 1 (may alam kang hint timestamp mula sa script/challenge) :"
+        echo "    tsdec \"dcc2a6a4...\" 1770242624"
+        echo "Halimbawa 2 (custom window at flag prefix) :"
+        echo "    tsdec \"dcc2a6a4...\" 1770242624 500 \"picoCTF{\""
+        return 1
+    fi
+
+    local ciphertext_hex="$1"
+    local center_ts="${2:-$(date +%s)}"
+    local window="${3:-100000}"
+    local flag_prefix="$4"
+
+    python3 -c "
+from hashlib import sha256
+from Crypto.Cipher import AES
+from multiprocessing import Pool, cpu_count
+import sys
+
+ciphertext_hex = sys.argv[1]
+center_ts = int(sys.argv[2])
+window = int(sys.argv[3])
+custom_prefix = sys.argv[4]
+
+try:
+    ciphertext = bytes.fromhex(ciphertext_hex)
+except ValueError:
+    print('[-] Error: Hindi valid na hex ang ibinigay na ciphertext.')
+    sys.exit(1)
+
+# Kung may binigay na custom prefix, gamitin lang yun. Kung wala, auto-detect
+# gamit ang mga common flag formats.
+if custom_prefix:
+    markers = [custom_prefix.encode()]
+else:
+    markers = [b'flag{', b'CTF{', b'picoCTF{', b'academy{', b'FLAG{']
+
+def try_timestamp(ts):
+    key = sha256(str(ts).encode()).digest()[:16]
+    cipher = AES.new(key, AES.MODE_ECB)
+    try:
+        decrypted = cipher.decrypt(ciphertext)
+        for marker in markers:
+            if marker in decrypted:
+                return (ts, decrypted)
+    except Exception:
+        pass
+    return None
+
+print(f'[*] Sinusubukan ang mga timestamp mula {center_ts - window} hanggang {center_ts + window} ({2*window} candidates)...')
+print(f'[*] Gamit ang {cpu_count()} CPU cores para mas mabilis...')
+
+timestamps = range(center_ts - window, center_ts + window + 1)
+found = False
+
+with Pool(cpu_count()) as pool:
+    for result in pool.imap_unordered(try_timestamp, timestamps, chunksize=500):
+        if result:
+            ts, decrypted = result
+            print(f'[+] NAHANAP sa timestamp {ts}!')
+            print(f'[+] Decrypted: {decrypted}')
+            found = True
+            pool.terminate()
+            break
+
+if not found:
+    print(f'[-] Walang nahanap sa loob ng window na ito (+/- {window} segundo).')
+    print('    Subukan: (1) palakihin ang window, (2) i-verify ang center_timestamp,')
+    print('    o (3) baka may ibang flag prefix - gamitin ang 4th argument para i-specify.')
+" "$ciphertext_hex" "$center_ts" "$window" "$flag_prefix"
+}
+
 
 # 2. Smart Hex XOR Decrypter (Pure Linux commands)
 hexdec() {
@@ -206,7 +288,7 @@ export ROCKYOU="/mnt/c/Users/Marwin/Downloads/DICT/CTF/rockyou.txt"
 alias clhelp='echo -e "\n\e[1;32m[+] CYVERDARIAN MAIN MENU\e[0m" && \
 echo "--------------------------------------------------------------------------------" && \
 echo "Type any of the following commands to view specific category cheat sheets:" && \
-echo -e "  \e[1;35mfhelp\e[0m   - Custom Functions (urlcheck, a1z26, hexdec, caesar, ctfid standalone usages)" && \
+echo -e "  \e[1;35mfhelp\e[0m   - Custom Functions (urlcheck, a1z26, hexdec, caesar, ctfid, tsdec standalone usages)" && \
 echo -e "  \e[1;35mcchelp\e[0m  - Cryptography Tools (Ciphers, encoding, decoding, and hashing)" && \
 echo -e "  \e[1;32mxhelp\e[0m   - Diffie-Hellman & XOR Tools (Custom Decryption Functions)" && \
 echo -e "  \e[1;36mcfhelp\e[0m  - Digital Forensics (File analysis, hidden data, and metadata)" && \
@@ -260,6 +342,13 @@ echo "                  format (MD5/SHA hash, Base64, Hex, Binary, JWT, A1Z26, o
 echo "                  kasama ang ready-to-use na command para subukan agad." && \
 echo "     Note       : Iba ito sa /usr/bin/identify (ImageMagick), kaya ibang pangalan" && \
 echo "                  ang ginamit para walang command clash." && \
+echo "" && \
+echo -e "  \e[1;32m6. Timestamp-based AES Cracker (tsdec)\e[0m" && \
+echo "     Usage      : tsdec <ciphertext_hex> [timestamp] [window] [flag_prefix]" && \
+echo "     Example    : tsdec \"dcc2a6a4...\" 1770242624 500 \"picoCTF{\"" && \
+echo "     Purpose    : Bini-brute force ang AES key na hango sa SHA256(timestamp) - common" && \
+echo "                  sa mga \"Timestamped Secrets\" style na challenge. Gumagamit ng" && \
+echo "                  multiprocessing at may auto-detect na flag prefix." && \
 echo "--------------------------------------------------------------------------------"'
 
 
